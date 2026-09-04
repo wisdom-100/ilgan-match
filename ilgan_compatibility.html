@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>우리 둘의 일간 궁합</title>
+<style>
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:#fff8f5;
+  color:#353342;
+  font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR","Apple SD Gothic Neo",sans-serif
+}
+.wrap{max-width:480px;margin:auto;padding:28px 18px 42px}
+h1{margin:4px 0 8px;font-size:30px;font-weight:900;letter-spacing:-1.5px}
+.sub{color:#99939c;font-size:14px;line-height:1.55;margin-bottom:24px}
+.card{
+  background:#fff;border:1px solid #f4e9e5;border-radius:25px;
+  padding:20px;box-shadow:0 8px 24px rgba(90,65,65,.06);margin-bottom:14px
+}
+.label{font-size:14px;font-weight:900;margin-bottom:10px}
+.person{font-size:12px;color:#aaa1a6;margin:18px 0 7px}
+input{
+  width:100%;border:1px solid #ece7e9;background:#fffafa;border-radius:15px;
+  padding:13px 12px;font:inherit;color:#45414b;outline:none
+}
+input:focus{border-color:#ffc1af;background:#fff}
+.main{
+  width:100%;border:0;border-radius:20px;padding:17px;margin:3px 0 15px;
+  background:#ff9277;color:#fff;font-size:16px;font-weight:900;
+  box-shadow:0 9px 18px rgba(255,146,119,.23);cursor:pointer
+}
+.main:active{transform:scale(.98)}
+.result{display:none}.result.show{display:block}
+.resultTop{text-align:center}
+.heart{font-size:30px;margin-bottom:5px}
+.score{font-size:42px;font-weight:950;color:#ed765d;line-height:1.1}
+.score span{font-size:14px;color:#9b949b;font-weight:800}
+.days{display:flex;justify-content:center;gap:8px;margin:14px 0 20px}
+.day{
+  min-width:70px;padding:10px 8px;border-radius:16px;background:#fff7f3;
+  border:1px solid #f6e8e3
+}
+.day b{display:block;font-size:17px}.day small{color:#9b949b;font-size:11px}
+.comment{
+  background:#fffaf8;border-radius:19px;padding:16px;text-align:center;
+  font-size:14px;line-height:1.65;margin-top:13px
+}
+.note{
+  margin-top:18px;padding:13px 14px;border-radius:15px;background:#faf8f8;
+  color:#9c969b;font-size:11px;line-height:1.6;text-align:center
+}
+.again{
+  width:100%;border:1px solid #eee8eb;background:#fff;color:#65606a;
+  border-radius:17px;padding:13px;margin-top:13px;font-weight:850;cursor:pointer
+}
+.error{display:none;color:#e56c61;font-size:12px;margin-top:7px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>우리 둘의 일간 궁합</h1>
+  <div class="sub">생년월일만 입력하면 두 사람의 일간을 바탕으로 가볍게 궁합을 확인해봐요.</div>
+
+  <div class="card">
+    <div class="label">생년월일을 입력해주세요</div>
+
+    <div class="person">나</div>
+    <input id="me" type="date">
+
+    <div class="person">상대방</div>
+    <input id="other" type="date">
+
+    <div class="error" id="error">생년월일을 모두 입력해주세요.</div>
+  </div>
+
+  <button class="main" id="check">💕 궁합 확인하기</button>
+
+  <div class="card result" id="result">
+    <div class="resultTop">
+      <div class="heart">💕</div>
+      <div class="score"><span id="score">86</span><span>점</span></div>
+      <div class="days">
+        <div class="day"><b id="meGan">갑목</b><small>나의 일간</small></div>
+        <div class="day"><b id="otherGan">병화</b><small>상대 일간</small></div>
+      </div>
+    </div>
+
+    <div class="day"><b id="love">⭐⭐⭐⭐☆</b><small>연애 궁합</small></div>
+    <div class="day"><b id="talk">⭐⭐⭐⭐⭐</b><small>대화 궁합</small></div>
+    <div class="day"><b id="friend">⭐⭐⭐⭐☆</b><small>친구 궁합</small></div>
+
+    <div class="comment" id="comment">서로의 장점을 자연스럽게 끌어내기 좋은 조합이에요.</div>
+
+    <div class="note">
+      ※ 재미를 위한 콘텐츠입니다.<br>
+      생년월일을 바탕으로 <b>일간만</b> 활용해 간단하게 풀이합니다.
+    </div>
+
+    <button class="again" id="again">다시 해보기</button>
+  </div>
+</div>
+
+<script>
+/*
+  간단한 재미용 일간 계산.
+  기준일: 2000-01-07 = 갑자(甲子) 일진.
+  실제 명리 상담처럼 출생시간/절기/출생지 등을 반영하지 않습니다.
+*/
+const gan=["갑목","을목","병화","정화","무토","기토","경금","신금","임수","계수"];
+
+function dayIndex(dateStr){
+  const d=new Date(dateStr+"T00:00:00");
+  const base=new Date("2000-01-07T00:00:00");
+  const days=Math.floor((d-base)/86400000);
+  return ((days%60)+60)%60;
+}
+
+function scoreFor(a,b){
+  const x=a,y=b;
+  if(x===y) return {score:82,love:4,talk:4,friend:5,text:"비슷한 성향이라 편안하게 통하는 조합이에요. 다만 서로 고집을 부리면 작은 갈등이 생길 수 있어요."};
+  const diff=(y-x+10)%10;
+  const special={
+    "0-2":[91,5,5,5,"서로의 장점을 자연스럽게 끌어내기 좋은 조합이에요."],
+    "2-4":[88,5,4,5,"한쪽의 활력과 다른 쪽의 안정감이 잘 어울리는 조합이에요."],
+    "4-6":[90,5,5,4,"서로에게 든든한 자극이 되어줄 수 있는 조합이에요."],
+    "6-8":[87,4,5,5,"차분하게 맞춰가면서 좋은 호흡을 만들기 좋은 조합이에요."],
+    "8-0":[89,5,4,5,"서로 다른 매력이 만나 재미있는 케미가 생길 수 있어요."]
+  };
+  const key=x+"-"+y;
+  if(special[key]) {
+    const s=special[key];
+    return {score:s[0],love:s[1],talk:s[2],friend:s[3],text:s[4]};
+  }
+  const s=68+((x*7+y*11)%22);
+  return {score:s,love:3+(s>=80?1:0),talk:3+(s>=78?1:0),friend:3+(s>=75?1:0),
+    text:"서로 다른 부분이 있는 만큼 맞춰가면 더 재미있는 관계가 될 수 있어요."};
+}
+
+function stars(n){return "⭐".repeat(n)+"☆".repeat(5-n)}
+
+function check(){
+  const me=document.getElementById("me").value;
+  const other=document.getElementById("other").value;
+  const error=document.getElementById("error");
+  if(!me||!other){error.style.display="block";return}
+  error.style.display="none";
+
+  const a=dayIndex(me)%10;
+  const b=dayIndex(other)%10;
+  const r=scoreFor(a,b);
+
+  document.getElementById("meGan").textContent=gan[a];
+  document.getElementById("otherGan").textContent=gan[b];
+  document.getElementById("score").textContent=r.score;
+  document.getElementById("love").textContent=stars(r.love);
+  document.getElementById("talk").textContent=stars(r.talk);
+  document.getElementById("friend").textContent=stars(r.friend);
+  document.getElementById("comment").textContent=r.text;
+  document.getElementById("result").classList.add("show");
+  document.getElementById("result").scrollIntoView({behavior:"smooth",block:"nearest"});
+}
+
+document.getElementById("check").addEventListener("click",check);
+document.getElementById("again").addEventListener("click",()=>{
+  document.getElementById("result").classList.remove("show");
+  window.scrollTo({top:0,behavior:"smooth"});
+});
+</script>
+</body>
+</html>
