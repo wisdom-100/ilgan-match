@@ -19,7 +19,7 @@ h1{margin:4px 0 8px;font-size:30px;font-weight:900;letter-spacing:-1.5px}
   background:#fff;border:1px solid #f4e9e5;border-radius:25px;
   padding:20px;box-shadow:0 8px 24px rgba(90,65,65,.06);margin-bottom:14px
 }
-.label{font-size:14px;font-weight:900;margin-bottom:10px}
+.label{font-size:14px;font-weight:900;margin-bottom:8px}.hint{font-size:11px;color:#aaa1a6;margin-bottom:10px}
 .person{font-size:12px;color:#aaa1a6;margin:18px 0 7px}
 input{
   width:100%;border:1px solid #ece7e9;background:#fffafa;border-radius:15px;
@@ -42,7 +42,7 @@ input:focus{border-color:#ffc1af;background:#fff}
   min-width:70px;padding:10px 8px;border-radius:16px;background:#fff7f3;
   border:1px solid #f6e8e3
 }
-.day b{display:block;font-size:17px}.day small{color:#9b949b;font-size:11px}
+.day b{display:block;font-size:17px}.day small{color:#9b949b;font-size:11px}.day-sub{display:block;color:#aaa1a6;font-size:10px;margin-top:2px}
 .comment{
   background:#fffaf8;border-radius:19px;padding:16px;text-align:center;
   font-size:14px;line-height:1.65;margin-top:13px
@@ -56,23 +56,38 @@ input:focus{border-color:#ffc1af;background:#fff}
   border-radius:17px;padding:13px;margin-top:13px;font-weight:850;cursor:pointer
 }
 .error{display:none;color:#e56c61;font-size:12px;margin-top:7px}
+
+.section-title{font-size:16px;font-weight:900;margin:22px 0 10px}
+.detail-grid{display:grid;gap:9px;margin-top:12px}
+.detail{
+  display:flex;gap:12px;align-items:flex-start;background:#fffaf8;
+  border:1px solid #f5e9e5;border-radius:18px;padding:14px 13px
+}
+.detail-icon{font-size:21px;line-height:1.2;min-width:25px}
+.detail b{font-size:14px}
+.detail p{margin:5px 0 0;color:#77717a;font-size:12px;line-height:1.6}
+.advice{
+  margin-top:12px;background:#fff3ed;border-radius:19px;padding:15px 16px;
+  line-height:1.65;font-size:13px;color:#514b53
+}
+.advice-title{font-weight:900;margin-bottom:5px;color:#ed765d}
 </style>
 </head>
 <body>
 <div class="wrap">
   <h1>우리 둘의 일간 궁합</h1>
-  <div class="sub">생년월일만 입력하면 두 사람의 일간을 바탕으로 가볍게 궁합을 확인해봐요.</div>
+  <div class="sub">생년월일을 직접 입력하면 일간과 일지를 바탕으로 가볍게 궁합을 확인해봐요.</div>
 
   <div class="card">
-    <div class="label">생년월일을 입력해주세요</div>
+    <div class="label">생년월일을 입력해주세요</div><div class="hint">숫자로 1995.03.21처럼 입력해 주세요.</div>
 
     <div class="person">나</div>
-    <input id="me" type="date">
+    <input id="me" type="text" inputmode="numeric" maxlength="10" placeholder="예: 1995.03.21" autocomplete="bday">
 
     <div class="person">상대방</div>
-    <input id="other" type="date">
+    <input id="other" type="text" inputmode="numeric" maxlength="10" placeholder="예: 1997.08.14" autocomplete="bday">
 
-    <div class="error" id="error">생년월일을 모두 입력해주세요.</div>
+    <div class="error" id="error">생년월일을 1995.03.21 형식으로 입력해주세요.</div>
   </div>
 
   <button class="main" id="check">💕 궁합 확인하기</button>
@@ -82,8 +97,8 @@ input:focus{border-color:#ffc1af;background:#fff}
       <div class="heart">💕</div>
       <div class="score"><span id="score">86</span><span>점</span></div>
       <div class="days">
-        <div class="day"><b id="meGan">갑목</b><small>나의 일간</small></div>
-        <div class="day"><b id="otherGan">병화</b><small>상대 일간</small></div>
+        <div class="day"><b id="meGan">갑목</b><small>나의 일간</small><span class="day-sub" id="meJi">자수</span><small>나의 일지</small></div>
+        <div class="day"><b id="otherGan">병화</b><small>상대 일간</small><span class="day-sub" id="otherJi">오화</span><small>상대 일지</small></div>
       </div>
     </div>
 
@@ -91,11 +106,49 @@ input:focus{border-color:#ffc1af;background:#fff}
     <div class="day"><b id="talk">⭐⭐⭐⭐⭐</b><small>대화 궁합</small></div>
     <div class="day"><b id="friend">⭐⭐⭐⭐☆</b><small>친구 궁합</small></div>
 
+    <div class="section-title">✨ 한눈에 보는 궁합</div>
     <div class="comment" id="comment">서로의 장점을 자연스럽게 끌어내기 좋은 조합이에요.</div>
+
+    <div class="detail-grid">
+      <div class="detail">
+        <div class="detail-icon">💗</div>
+        <div>
+          <b>연애할 때</b>
+          <p id="loveText">서로에게 어떤 매력으로 끌리는지 가볍게 봐요.</p>
+        </div>
+      </div>
+      <div class="detail">
+        <div class="detail-icon">💬</div>
+        <div>
+          <b>대화할 때</b>
+          <p id="talkText">대화가 잘 통하는 포인트와 주의할 점을 알려드려요.</p>
+        </div>
+      </div>
+      <div class="detail">
+        <div class="detail-icon">🌿</div>
+        <div>
+          <b>서로에게 좋은 점</b>
+          <p id="goodText">두 사람의 다른 점이 어떻게 장점이 될 수 있는지 봐요.</p>
+        </div>
+      </div>
+      <div class="detail">
+        <div class="detail-icon">⚡</div>
+        <div>
+          <b>살짝 주의할 점</b>
+          <p id="cautionText">서로 다르게 느낄 수 있는 부분을 가볍게 알려드려요.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="advice">
+      <div class="advice-title">💡 궁합 한마디</div>
+      <div id="adviceText">서로의 속도를 존중하면 더 편안한 관계가 될 수 있어요.</div>
+    </div>
 
     <div class="note">
       ※ 재미를 위한 콘텐츠입니다.<br>
-      생년월일을 바탕으로 <b>일간만</b> 활용해 간단하게 풀이합니다.
+      생년월일을 바탕으로 <b>일간 + 일지</b>를 활용해 간단하게 풀이합니다.<br>
+      출생시간·출생지·절기 등을 반영한 정밀한 사주 풀이와는 다를 수 있어요.
     </div>
 
     <button class="again" id="again">다시 해보기</button>
@@ -104,64 +157,139 @@ input:focus{border-color:#ffc1af;background:#fff}
 
 <script>
 /*
-  간단한 재미용 일간 계산.
+  재미용 일간 + 일지 계산.
   기준일: 2000-01-07 = 갑자(甲子) 일진.
-  실제 명리 상담처럼 출생시간/절기/출생지 등을 반영하지 않습니다.
+  출생시간/출생지/절기 보정 등은 반영하지 않는 간단한 콘텐츠용 계산입니다.
 */
 const gan=["갑목","을목","병화","정화","무토","기토","경금","신금","임수","계수"];
+const ji=["자수","축토","인목","묘목","진토","사화","오화","미토","신금","유금","술토","해수"];
 
-function dayIndex(dateStr){
-  const d=new Date(dateStr+"T00:00:00");
+function parseDate(value){
+  const s=value.trim().replace(/[^\d]/g,"");
+  if(!/^\d{8}$/.test(s)) return null;
+  const y=Number(s.slice(0,4)), m=Number(s.slice(4,6)), d=Number(s.slice(6,8));
+  const dt=new Date(y,m-1,d);
+  if(dt.getFullYear()!==y || dt.getMonth()!==m-1 || dt.getDate()!==d) return null;
+  if(y<1900 || y>2100) return null;
+  return {y,m,d,iso:`${String(y).padStart(4,"0")}-${String(m).padStart(2,"0")}-${String(d).padStart(2,"0")}`};
+}
+
+function formatDateInput(el){
+  let s=el.value.replace(/[^\d]/g,"").slice(0,8);
+  if(s.length>4) s=s.slice(0,4)+"."+s.slice(4);
+  if(s.length>7) s=s.slice(0,7)+"."+s.slice(7);
+  el.value=s;
+}
+
+function dayIndex(dateObj){
+  const d=new Date(dateObj.iso+"T00:00:00");
   const base=new Date("2000-01-07T00:00:00");
   const days=Math.floor((d-base)/86400000);
   return ((days%60)+60)%60;
 }
 
-function scoreFor(a,b){
-  const x=a,y=b;
-  if(x===y) return {score:82,love:4,talk:4,friend:5,text:"비슷한 성향이라 편안하게 통하는 조합이에요. 다만 서로 고집을 부리면 작은 갈등이 생길 수 있어요."};
-  const diff=(y-x+10)%10;
-  const special={
-    "0-2":[91,5,5,5,"서로의 장점을 자연스럽게 끌어내기 좋은 조합이에요."],
-    "2-4":[88,5,4,5,"한쪽의 활력과 다른 쪽의 안정감이 잘 어울리는 조합이에요."],
-    "4-6":[90,5,5,4,"서로에게 든든한 자극이 되어줄 수 있는 조합이에요."],
-    "6-8":[87,4,5,5,"차분하게 맞춰가면서 좋은 호흡을 만들기 좋은 조합이에요."],
-    "8-0":[89,5,4,5,"서로 다른 매력이 만나 재미있는 케미가 생길 수 있어요."]
-  };
-  const key=x+"-"+y;
-  if(special[key]) {
-    const s=special[key];
-    return {score:s[0],love:s[1],talk:s[2],friend:s[3],text:s[4]};
-  }
-  const s=68+((x*7+y*11)%22);
-  return {score:s,love:3+(s>=80?1:0),talk:3+(s>=78?1:0),friend:3+(s>=75?1:0),
-    text:"서로 다른 부분이 있는 만큼 맞춰가면 더 재미있는 관계가 될 수 있어요."};
+const ganTraits=[
+  "곧고 주도적인","유연하고 섬세한","밝고 활기찬","따뜻하고 감성적인","차분하고 든든한",
+  "세심하고 현실적인","깔끔하고 결단력 있는","섬세하고 기준이 분명한","자유롭고 유연한","조용하고 깊이 있는"
+];
+const jiTraits=[
+  "새로운 시작을 좋아하는","안정과 편안함을 중요하게 여기는","활동적이고 호기심 많은","섬세하고 관계를 중요하게 여기는",
+  "현실적이고 신중한","표현력이 좋고 분위기를 타는","솔직하고 추진력이 있는","배려와 균형을 중시하는",
+  "변화를 즐기고 적응력이 좋은","기준과 깔끔함을 중시하는","신중하고 책임감 있는","감각적이고 유연한"
+];
+
+function scoreFor(ag,aj,bg,bj){
+  const sameGan=ag===bg, sameJi=aj===bj;
+  const ganDiff=Math.min((ag-bg+10)%10,(bg-ag+10)%10);
+  const jiDiff=Math.min((aj-bj+12)%12,(bj-aj+12)%12);
+
+  // 일간 + 일지를 함께 반영한 재미용 점수
+  let score=72;
+  score += sameGan ? 8 : (ganDiff<=2 ? 6 : ganDiff<=4 ? 3 : 0);
+  score += sameJi ? 7 : (jiDiff<=2 ? 5 : jiDiff<=4 ? 3 : 0);
+  score += ((ag*3 + bg*5 + aj*7 + bj*11) % 9) - 4;
+  score=Math.max(62,Math.min(96,score));
+
+  const love=Math.max(3,Math.min(5,Math.round((score+4)/20)));
+  const talk=Math.max(3,Math.min(5,Math.round((score+1)/20)));
+  const friend=Math.max(3,Math.min(5,Math.round((score+6)/20)));
+
+  const pairText = sameGan && sameJi
+    ? `두 사람의 일간과 일지가 모두 같아요. 서로의 기본 성향과 관계에서 편안함을 느끼는 방식이 비슷해서 빠르게 가까워질 수 있는 조합이에요.`
+    : sameGan
+      ? `일간은 같아서 기본적인 성향은 비슷하지만, 일지가 달라 가까운 관계에서 드러나는 생활 방식이나 감정 표현은 다를 수 있어요.`
+      : sameJi
+        ? `일간은 다르지만 일지가 같아요. 겉으로는 다른 느낌이어도 가까워질수록 비슷한 생활 감각과 관계 리듬을 발견하기 쉬워요.`
+        : `일간과 일지가 모두 달라 서로 다른 매력이 뚜렷한 조합이에요. 잘 맞춰가면 한쪽의 장점을 다른 한쪽이 자연스럽게 보완해줄 수 있어요.`;
+
+  const loveText =
+    `${gan[ag]}인 나는 ${ganTraits[ag]} 편이고, ${gan[bg]}인 상대는 ${ganTraits[bg]} 성향이 있어요. ` +
+    `${ji[aj]} 일지와 ${ji[bj]} 일지가 만나 가까운 관계에서는 서로의 생활 리듬과 애정 표현 방식을 이해하는 게 중요해요.`;
+
+  const talkText =
+    `일간에서는 ${ganTraits[ag]} 성향과 ${ganTraits[bg]} 성향의 차이가 대화 방식에 나타날 수 있어요. ` +
+    `일지는 친밀할수록 드러나는 반응 방식이라, ${ji[aj]}와 ${ji[bj]}의 차이를 인정하면 오해를 줄이기 좋아요.`;
+
+  const goodText =
+    sameGan || sameJi
+      ? `공통된 ${sameGan ? "일간" : "일지"}가 있어서 서로를 이해할 수 있는 접점이 분명해요. ` +
+        `비슷한 부분은 편안함으로, 다른 부분은 서로에게 새로운 자극으로 활용해보세요.`
+      : `두 사람은 ${ganTraits[ag]} 성향과 ${ganTraits[bg]} 성향이 달라서 서로에게 없는 관점을 배울 수 있어요. ` +
+        `일지까지 다르기 때문에 함께 새로운 경험을 쌓을수록 관계가 재미있어질 수 있어요.`;
+
+  const cautionText =
+    `상대의 일간만 보고 성격을 단정하지 않는 게 좋아요. 특히 가까운 사이에서는 일지의 영향처럼 느껴지는 생활 습관과 감정 표현의 차이가 더 크게 보일 수 있어요.`;
+
+  const adviceText =
+    score>=88
+      ? `궁합 점수는 꽤 좋은 편! 비슷한 점은 편하게 즐기고, 다른 점은 서로의 개성으로 인정해보세요.`
+      : score>=78
+        ? `잘 맞는 부분과 다른 부분이 적당히 섞인 조합이에요. 서로의 속도만 존중해도 훨씬 편해질 수 있어요.`
+        : `서로 다른 점이 있는 조합이에요. 맞추려고 애쓰기보다 상대의 방식을 먼저 이해해보면 의외의 케미가 생길 수 있어요.`;
+
+  return {score,love,talk,friend,text:pairText,loveText,talkText,goodText,cautionText,adviceText};
 }
 
 function stars(n){return "⭐".repeat(n)+"☆".repeat(5-n)}
 
 function check(){
-  const me=document.getElementById("me").value;
-  const other=document.getElementById("other").value;
+  const me=parseDate(document.getElementById("me").value);
+  const other=parseDate(document.getElementById("other").value);
   const error=document.getElementById("error");
-  if(!me||!other){error.style.display="block";return}
+
+  if(!me||!other){
+    error.textContent="생년월일을 1995.03.21 형식으로 정확하게 입력해주세요.";
+    error.style.display="block";
+    return;
+  }
   error.style.display="none";
 
-  const a=dayIndex(me)%10;
-  const b=dayIndex(other)%10;
-  const r=scoreFor(a,b);
+  const me60=dayIndex(me);
+  const other60=dayIndex(other);
+  const ag=me60%10, aj=me60%12;
+  const bg=other60%10, bj=other60%12;
+  const r=scoreFor(ag,aj,bg,bj);
 
-  document.getElementById("meGan").textContent=gan[a];
-  document.getElementById("otherGan").textContent=gan[b];
+  document.getElementById("meGan").textContent=gan[ag];
+  document.getElementById("otherGan").textContent=gan[bg];
+  document.getElementById("meJi").textContent=ji[aj];
+  document.getElementById("otherJi").textContent=ji[bj];
   document.getElementById("score").textContent=r.score;
   document.getElementById("love").textContent=stars(r.love);
   document.getElementById("talk").textContent=stars(r.talk);
   document.getElementById("friend").textContent=stars(r.friend);
   document.getElementById("comment").textContent=r.text;
+  document.getElementById("loveText").textContent=r.loveText;
+  document.getElementById("talkText").textContent=r.talkText;
+  document.getElementById("goodText").textContent=r.goodText;
+  document.getElementById("cautionText").textContent=r.cautionText;
+  document.getElementById("adviceText").textContent=r.adviceText;
   document.getElementById("result").classList.add("show");
   document.getElementById("result").scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 
+document.getElementById("me").addEventListener("input",e=>formatDateInput(e.target));
+document.getElementById("other").addEventListener("input",e=>formatDateInput(e.target));
 document.getElementById("check").addEventListener("click",check);
 document.getElementById("again").addEventListener("click",()=>{
   document.getElementById("result").classList.remove("show");
